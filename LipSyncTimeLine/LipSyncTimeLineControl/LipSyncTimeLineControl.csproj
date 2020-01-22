@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5F95B084-2BF9-4A8D-8D83-F50FBE1B959C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LipSyncTimeLineControl</RootNamespace>
+    <AssemblyName>LipSyncTimeLineControl</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.9.0\lib\net35\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enums\BehaviorModeEnum.cs" />
+    <Compile Include="Enums\RectangleEdgeEnum.cs" />
+    <Compile Include="Events\SoundPlayerTickEventsArgs.cs" />
+    <Compile Include="Events\SelectionChangedEventsArgs.cs" />
+    <Compile Include="Helper\BoundsHelper.cs" />
+    <Compile Include="Helper\ColorHelper.cs" />
+    <Compile Include="Helper\Extensions.cs" />
+    <Compile Include="Helper\RectangleHelper.cs" />
+    <Compile Include="Helper\SelectionHelper.cs" />
+    <Compile Include="Helper\SurrogateHelper.cs" />
+    <Compile Include="Models\TimelinePartBase.cs" />
+    <Compile Include="Models\TextTimelineParts.cs" />
+    <Compile Include="Models\TextTimelineTrack.cs" />
+    <Compile Include="Models\TimelineTrackBase.cs" />
+    <Compile Include="MorphListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Models\AudioTrackTimelineParts.cs" />
+    <Compile Include="Models\MorphTimelineParts.cs" />
+    <Compile Include="Models\AudioTrackTimelineTrack.cs" />
+    <Compile Include="Models\MorphTimelineTrack.cs" />
+    <Compile Include="MorphTemplate.cs" />
+    <Compile Include="Popup\PopupContextContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Popup\PopupContextContainer.Designer.cs">
+      <DependentUpon>PopupContextContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\PopupContextControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Popup\PopupContextControl.Designer.cs">
+      <DependentUpon>PopupContextControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\PopupContextTrackText.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Popup\PopupContextTrackText.Designer.cs">
+      <DependentUpon>PopupContextTrackText.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Popup\PopupContextTrackValue.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Popup\PopupContextTrackValue.Designer.cs">
+      <DependentUpon>PopupContextTrackValue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Scrollbar\VerticalScrollbar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scrollbar\VerticalScrollbar.Designer.cs">
+      <DependentUpon>VerticalScrollbar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scrollbar\HorizontalScrollbar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scrollbar\HorizontalScrollbar.Designer.cs">
+      <DependentUpon>HorizontalScrollbar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scrollbar\AbstractScrollbar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scrollbar\AbstractScrollbar.Designer.cs">
+      <DependentUpon>AbstractScrollbar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SurrogateTrack.cs" />
+    <Compile Include="LipSyncTimeLineClock.cs" />
+    <Compile Include="Timeline.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Timeline.Designer.cs">
+      <DependentUpon>Timeline.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Enums\TimelineTrackTypeEnum.cs" />
+    <Compile Include="ToolTipCustom\ToolTipTrack.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Popup\PopupContextControl.resx">
+      <DependentUpon>PopupContextControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\PopupContextTrackText.resx">
+      <DependentUpon>PopupContextTrackText.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Popup\PopupContextTrackValue.resx">
+      <DependentUpon>PopupContextTrackValue.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scrollbar\AbstractScrollbar.resx">
+      <DependentUpon>AbstractScrollbar.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scrollbar\VerticalScrollbar.resx">
+      <DependentUpon>VerticalScrollbar.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scrollbar\HorizontalScrollbar.resx">
+      <DependentUpon>HorizontalScrollbar.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Timeline.resx">
+      <DependentUpon>Timeline.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phoneme_CDGKNRSThYZ.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phoneme_E.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phoneme_FV.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phoneme_L.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phoneme_MBP.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phoneme_None.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phoneme_O.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phoneme_U.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phoneme_WQ.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Phoneme_AI.jpg" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
