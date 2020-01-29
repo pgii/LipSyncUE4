@@ -76,9 +76,11 @@
     <Compile Include="Helper\RectangleHelper.cs" />
     <Compile Include="Helper\SelectionHelper.cs" />
     <Compile Include="Helper\SurrogateHelper.cs" />
+    <Compile Include="Models\WordsTimelineParts.cs" />
+    <Compile Include="Models\WordsTimelineTrack.cs" />
     <Compile Include="Models\TimelinePartBase.cs" />
-    <Compile Include="Models\TextTimelineParts.cs" />
-    <Compile Include="Models\TextTimelineTrack.cs" />
+    <Compile Include="Models\SubtitleTimelineParts.cs" />
+    <Compile Include="Models\SubtitleTimelineTrack.cs" />
     <Compile Include="Models\TimelineTrackBase.cs" />
     <Compile Include="MorphListBox.cs">
       <SubType>Component</SubType>
@@ -87,6 +89,7 @@
     <Compile Include="Models\MorphTimelineParts.cs" />
     <Compile Include="Models\AudioTrackTimelineTrack.cs" />
     <Compile Include="Models\MorphTimelineTrack.cs" />
+    <Compile Include="PhonemeTemplate.cs" />
     <Compile Include="MorphTemplate.cs" />
     <Compile Include="Popup\PopupContextContainer.cs">
       <SubType>Component</SubType>

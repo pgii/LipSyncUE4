@@ -40,17 +40,21 @@ namespace LipSyncTimeLineControl.Helper
             int q = Convert.ToInt32(value * (1 - f * saturation)).Clamp(0, 255);
             int t = Convert.ToInt32(value * (1 - (1 - f) * saturation)).Clamp(0, 255);
 
-            if (hi == 0)
-                return Color.FromArgb(255, v, t, p);
-            if (hi == 1)
-                return Color.FromArgb(255, q, v, p);
-            if (hi == 2)
-                return Color.FromArgb(255, p, v, t);
-            if (hi == 3)
-                return Color.FromArgb(255, p, q, v);
-            if (hi == 4)
-                return Color.FromArgb(255, t, p, v);
-            return Color.FromArgb(255, v, p, q);
+            switch (hi)
+            {
+                case 0:
+                    return Color.FromArgb(255, v, t, p);
+                case 1:
+                    return Color.FromArgb(255, q, v, p);
+                case 2:
+                    return Color.FromArgb(255, p, v, t);
+                case 3:
+                    return Color.FromArgb(255, p, q, v);
+                case 4:
+                    return Color.FromArgb(255, t, p, v);
+                default:
+                    return Color.FromArgb(255, v, p, q);
+            }
         }
 
         public static Color AdjustColor(Color color, double hue, double saturation, double value)

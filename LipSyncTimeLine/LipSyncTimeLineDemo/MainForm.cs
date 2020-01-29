@@ -1,12 +1,11 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
-using LipSyncTimeLineControl;
+﻿using LipSyncTimeLineControl;
 using LipSyncTimeLineControl.Enums;
 using LipSyncTimeLineControl.Events;
 using LipSyncTimeLineControl.Models;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace LipSyncTimeLineDemo
 {
@@ -16,14 +15,14 @@ namespace LipSyncTimeLineDemo
         {
             InitializeComponent();
 
-            foreach (MorphTimelineTrack phonemeTemplate in MorphTemplate.MorphTemplateList.Where(x => x.TimelineTrackType == TimelineTrackTypeEnum.Phoneme))
+            foreach (MorphTimelineTrack phonemeTemplate in MorphTemplate.MorphTemplateDictionary.Values.Where(x => x.TimelineTrackType == TimelineTrackTypeEnum.Phoneme))
                 morphListBoxPhoneme.Items.Add(phonemeTemplate);
 
-            foreach (MorphTimelineTrack expressionTemplate in MorphTemplate.MorphTemplateList.Where(x => x.TimelineTrackType == TimelineTrackTypeEnum.Expression))
+            foreach (MorphTimelineTrack expressionTemplate in MorphTemplate.MorphTemplateDictionary.Values.Where(x => x.TimelineTrackType == TimelineTrackTypeEnum.Expression))
                 morphListBoxExpression.Items.Add(expressionTemplate);
 
-            timeline1.SelectionChanged += TimelineSelectionChanged;
-            timeline1.SoundPlayerTick += SoundPlayerTick;
+            timeline.SelectionChanged += TimelineSelectionChanged;
+            timeline.SoundPlayerTick += SoundPlayerTick;
         }
 
         private static void TimelineSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
@@ -49,7 +48,7 @@ namespace LipSyncTimeLineDemo
         {
             Debug.WriteLine($"Elapsed Time: {e.ElapsedTime}");
 
-            TimelineTrackBase track = timeline1.GetCurrentPhonemeFromElapsedTime(e.ElapsedTime / 10);
+            TimelineTrackBase track = timeline.GetCurrentPhonemeFromElapsedTime(e.ElapsedTime / 10);
 
             pbPhonemeImage.Image = track != null ? track.Bitmap : LipSyncTimeLineControl.Properties.Resources.Phoneme_None;
         }
@@ -76,22 +75,32 @@ namespace LipSyncTimeLineDemo
 
         private void btnSaveProject_Click(object sender, EventArgs e)
         {
-            timeline1.SaveProject();
+            timeline.SaveProject();
         }
 
         private void btnLoadProject_Click(object sender, EventArgs e)
         {
-            timeline1.LoadProject();
+            timeline.LoadProject();
         }
 
-        private void btnAddTextTrack_Click(object sender, EventArgs e)
+        private void btnAddSubtitleTrack_Click(object sender, EventArgs e)
         {
-            timeline1.AddTextTrack();
+            timeline.AddSubtitleTrack();
         }
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-            timeline1.Export();
+            timeline.Export();
+        }
+
+        private void btnAddWordsTrack_Click(object sender, EventArgs e)
+        {
+            timeline.AddWordsTrack(rtbPhraseText.Text);
+        }
+
+        private void btnGeneratePhoneme_Click(object sender, EventArgs e)
+        {
+            timeline.GeneratePhoneme();
         }
     }
 }

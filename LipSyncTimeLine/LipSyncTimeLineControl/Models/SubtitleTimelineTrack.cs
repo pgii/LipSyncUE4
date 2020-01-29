@@ -3,7 +3,7 @@ using LipSyncTimeLineControl.Enums;
 
 namespace LipSyncTimeLineControl.Models
 {
-    public class TextTimelineTrack : TimelineTrackBase
+    public class SubtitleTimelineTrack : TimelineTrackBase
     {
         public sealed override string Name { get; set; }
         public sealed override float Start { get; set; }
@@ -13,13 +13,13 @@ namespace LipSyncTimeLineControl.Models
         public sealed override bool IsLocked { get; set; }
         public sealed override Bitmap Bitmap { get; set; }
 
-        public TextTimelineTrack(string name, float start, float end, float defaultValue)
+        public SubtitleTimelineTrack(string name, float start, float end)
         {
             Name = name;
             Start = start;
             End = end;
-            Value = defaultValue;
-            TimelineTrackType = TimelineTrackTypeEnum.Text;
+            Value = 0;
+            TimelineTrackType = TimelineTrackTypeEnum.Subtitle;
             IsLocked = false;
             Bitmap = null;
         }

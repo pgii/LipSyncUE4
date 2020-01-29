@@ -2,15 +2,15 @@
 
 namespace LipSyncTimeLineControl.Models
 {
-    public class TextTimelineParts : TimelinePartBase
+    public class WordsTimelineParts : TimelinePartBase
     {
         public sealed override string Name { get; set; }
         public sealed override TimelineTrackTypeEnum TimelineTrackType { get; set; }
 
-        public TextTimelineParts(string name)
+        public WordsTimelineParts(string name)
         {
             Name = name;
-            TimelineTrackType = TimelineTrackTypeEnum.Text;
+            TimelineTrackType = TimelineTrackTypeEnum.Words;
         }
 
         public override string ToString()

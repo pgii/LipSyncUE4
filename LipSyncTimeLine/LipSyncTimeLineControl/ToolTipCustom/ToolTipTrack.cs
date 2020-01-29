@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace LipSyncTimeLineControl.ToolTipCustom
 {
-    class ToolTipTrack : ToolTip
+    internal class ToolTipTrack : ToolTip
     {
         private TimelineTrackBase _enterTrack;
 
@@ -19,7 +19,7 @@ namespace LipSyncTimeLineControl.ToolTipCustom
 
         public void Hidden(IWin32Window window)
         {
-            _enterTrack = new TextTimelineTrack("", 0, 0 , 0);
+            _enterTrack = new SubtitleTimelineTrack("", 0, 0);
             Hide(window);
         }
     }

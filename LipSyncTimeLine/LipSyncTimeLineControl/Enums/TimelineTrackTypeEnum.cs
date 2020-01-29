@@ -6,6 +6,7 @@
         AudioTrack,
         Phoneme,
         Expression,
-        Text
+        Subtitle,
+        Words
     }
 }
