@@ -1,11 +1,12 @@
 # Concept project lip sync for Genesis 8 in Unreal Engine using morph targets
 
-Used plugins for UE4
+Upd: Added the ability to generate phonemes based on words. (Preston Blair)
 
-Json Blueprint
-https://www.unrealengine.com/marketplace/en-US/product/json-blueprint
+Upd: Removed the use of the JSON plugin in Unread Engine
+
 
 https://youtu.be/NMTRQBfOoqE
+https://youtu.be/4L-_ZwWEvLE
 
 ![alt text](https://github.com/pgii/LipSyncUE4/blob/master/Screenshots/Screenshot01.jpg)
 
