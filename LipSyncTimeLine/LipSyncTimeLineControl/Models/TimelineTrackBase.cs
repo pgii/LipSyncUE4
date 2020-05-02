@@ -1,5 +1,4 @@
 ﻿using LipSyncTimeLineControl.Enums;
-using System.Drawing;
 
 namespace LipSyncTimeLineControl.Models
 {
@@ -11,6 +10,5 @@ namespace LipSyncTimeLineControl.Models
         public abstract float Value { get; set; }
         public abstract TimelineTrackTypeEnum TimelineTrackType { get; set; }
         public abstract bool IsLocked { get; set; }
-        public abstract Bitmap Bitmap { get; set; }
     }
 }

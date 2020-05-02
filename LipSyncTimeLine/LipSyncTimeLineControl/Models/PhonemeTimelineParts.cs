@@ -3,7 +3,7 @@ using LipSyncTimeLineControl.Enums;
 
 namespace LipSyncTimeLineControl.Models
 {
-    public class AudioTrackTimelineParts : TimelinePartBase
+    public class PhonemeTimelineParts : TimelinePartBase
     {
         public sealed override string Name { get; set; }
         public sealed override TimelineTrackTypeEnum TimelineTrackType { get; set; }
@@ -11,14 +11,13 @@ namespace LipSyncTimeLineControl.Models
         public sealed override Color GradientColor { get; set; }
         public sealed override Color BorderColor { get; set; }
 
-        public AudioTrackTimelineParts(string name)
+        public PhonemeTimelineParts(string name)
         {
             Name = name;
-            TimelineTrackType = TimelineTrackTypeEnum.AudioTrack;
-            TrackElements.Add(new AudioTrackTimelineTrack("AudioTrack", 0, 700, true));
-            BackColor = ColorTranslator.FromHtml("#BE3730");
-            GradientColor = ColorTranslator.FromHtml("#EC5D59");
-            BorderColor = ColorTranslator.FromHtml("#9F3936");
+            TimelineTrackType = TimelineTrackTypeEnum.Phoneme;
+            BackColor = ColorTranslator.FromHtml("#51A451");
+            GradientColor = ColorTranslator.FromHtml("#61C261");
+            BorderColor = ColorTranslator.FromHtml("#448944");
         }
 
         public override string ToString()

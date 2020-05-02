@@ -15,11 +15,11 @@ namespace LipSyncTimeLineDemo
         {
             InitializeComponent();
 
-            foreach (MorphTimelineTrack phonemeTemplate in MorphTemplate.MorphTemplateDictionary.Values.Where(x => x.TimelineTrackType == TimelineTrackTypeEnum.Phoneme))
-                morphListBoxPhoneme.Items.Add(phonemeTemplate);
+            foreach (PhonemeTimelineTrack phonemeTemplate in PhonemeTemplate.PhonemeTrackTemplateDictionary.Values)
+                phonemeListBoxPhoneme.Items.Add(phonemeTemplate);
 
-            foreach (MorphTimelineTrack expressionTemplate in MorphTemplate.MorphTemplateDictionary.Values.Where(x => x.TimelineTrackType == TimelineTrackTypeEnum.Expression))
-                morphListBoxExpression.Items.Add(expressionTemplate);
+            foreach (ExpressionTimelineTrack expressionTemplate in ExpressionTemplate.ExpressionTrackTemplateDictionary.Values)
+                expressionListBoxExpression.Items.Add(expressionTemplate);
 
             timeline.SelectionChanged += TimelineSelectionChanged;
             timeline.SoundPlayerTick += SoundPlayerTick;
@@ -50,27 +50,27 @@ namespace LipSyncTimeLineDemo
 
             TimelineTrackBase track = timeline.GetCurrentPhonemeFromElapsedTime(e.ElapsedTime / 10);
 
-            pbPhonemeImage.Image = track != null ? track.Bitmap : LipSyncTimeLineControl.Properties.Resources.Phoneme_None;
+            pbPhonemeImage.Image = track != null ? PhonemeTemplate.GetPhonemeImage(track.Name) : LipSyncTimeLineControl.Properties.Resources.Phoneme_None;
         }
 
         private void morphListBoxPhoneme_MouseDown(object sender, MouseEventArgs e)
         {
-            if (morphListBoxPhoneme.Items.Count == 0)
+            if (phonemeListBoxPhoneme.Items.Count == 0)
                 return;
 
-            int index = morphListBoxPhoneme.IndexFromPoint(e.X, e.Y);
+            int index = phonemeListBoxPhoneme.IndexFromPoint(e.X, e.Y);
             if (index > -1)
-                DoDragDrop(morphListBoxPhoneme.Items[index], DragDropEffects.All);
+                DoDragDrop(phonemeListBoxPhoneme.Items[index], DragDropEffects.All);
         }
 
         private void morphListBoxExpression_MouseDown(object sender, MouseEventArgs e)
         {
-            if (morphListBoxExpression.Items.Count == 0)
+            if (expressionListBoxExpression.Items.Count == 0)
                 return;
 
-            int index = morphListBoxExpression.IndexFromPoint(e.X, e.Y);
+            int index = expressionListBoxExpression.IndexFromPoint(e.X, e.Y);
             if (index > -1)
-                DoDragDrop(morphListBoxExpression.Items[index], DragDropEffects.Copy);
+                DoDragDrop(expressionListBoxExpression.Items[index], DragDropEffects.Copy);
         }
 
         private void btnSaveProject_Click(object sender, EventArgs e)

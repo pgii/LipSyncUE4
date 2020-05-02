@@ -1,8 +1,9 @@
 ﻿using LipSyncTimeLineControl.Enums;
+using System;
 
 namespace LipSyncTimeLineControl.Models
 {
-    public class SubtitleTimelineTrack : TimelineTrackBase
+    public class ExpressionTimelineTrack : TimelineTrackBase, ICloneable
     {
         public sealed override string Name { get; set; }
         public sealed override float Start { get; set; }
@@ -11,19 +12,24 @@ namespace LipSyncTimeLineControl.Models
         public sealed override TimelineTrackTypeEnum TimelineTrackType { get; set; }
         public sealed override bool IsLocked { get; set; }
 
-        public SubtitleTimelineTrack(string name, float start, float end)
+        public ExpressionTimelineTrack(string name, float start, float end, float defaultValue)
         {
             Name = name;
             Start = start;
             End = end;
-            Value = 0;
-            TimelineTrackType = TimelineTrackTypeEnum.Subtitle;
+            Value = defaultValue;
+            TimelineTrackType = TimelineTrackTypeEnum.Expression;
             IsLocked = false;
         }
 
         public override string ToString()
         {
             return $"Name: {Name}, End: {End}, Start: {Start}";
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

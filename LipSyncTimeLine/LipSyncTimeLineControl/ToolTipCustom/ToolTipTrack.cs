@@ -10,11 +10,9 @@ namespace LipSyncTimeLineControl.ToolTipCustom
 
         public void Show(TimelineTrackBase enterTrack, string text, IWin32Window window, Point point, int duration)
         {
-            if (_enterTrack != enterTrack)
-            {
-                _enterTrack = enterTrack;
-                Show(text, window, point, duration);
-            }
+            if (_enterTrack == enterTrack) return;
+            _enterTrack = enterTrack;
+            Show(text, window, point, duration);
         }
 
         public void Hidden(IWin32Window window)

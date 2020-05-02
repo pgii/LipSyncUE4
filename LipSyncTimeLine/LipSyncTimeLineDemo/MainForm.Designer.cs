@@ -37,11 +37,11 @@
             this.btnAddWordsTrack = new System.Windows.Forms.Button();
             this.btnExport = new System.Windows.Forms.Button();
             this.btnAddSubtitleTrack = new System.Windows.Forms.Button();
-            this.morphListBoxPhoneme = new LipSyncTimeLineControl.MorphListBox();
-            this.morphListBoxExpression = new LipSyncTimeLineControl.MorphListBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pbPhonemeImage = new System.Windows.Forms.PictureBox();
             this.timeline = new LipSyncTimeLineControl.Timeline();
+            this.phonemeListBoxPhoneme = new LipSyncTimeLineControl.MorphListBox();
+            this.expressionListBoxExpression = new LipSyncTimeLineControl.MorphListBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbPhonemeImage)).BeginInit();
@@ -76,9 +76,9 @@
             this.panel1.Controls.Add(this.btnAddWordsTrack);
             this.panel1.Controls.Add(this.btnExport);
             this.panel1.Controls.Add(this.btnAddSubtitleTrack);
-            this.panel1.Controls.Add(this.morphListBoxPhoneme);
+            this.panel1.Controls.Add(this.phonemeListBoxPhoneme);
             this.panel1.Controls.Add(this.btnLoadProject);
-            this.panel1.Controls.Add(this.morphListBoxExpression);
+            this.panel1.Controls.Add(this.expressionListBoxExpression);
             this.panel1.Controls.Add(this.btnSaveProject);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(1018, 0);
@@ -101,7 +101,7 @@
             // 
             this.rtbPhraseText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbPhraseText.Location = new System.Drawing.Point(14, 231);
-            this.rtbPhraseText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.rtbPhraseText.Margin = new System.Windows.Forms.Padding(2);
             this.rtbPhraseText.Name = "rtbPhraseText";
             this.rtbPhraseText.Size = new System.Drawing.Size(205, 42);
             this.rtbPhraseText.TabIndex = 9;
@@ -140,30 +140,6 @@
             this.btnAddSubtitleTrack.UseVisualStyleBackColor = true;
             this.btnAddSubtitleTrack.Click += new System.EventHandler(this.btnAddSubtitleTrack_Click);
             // 
-            // morphListBoxPhoneme
-            // 
-            this.morphListBoxPhoneme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.morphListBoxPhoneme.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.morphListBoxPhoneme.FormattingEnabled = true;
-            this.morphListBoxPhoneme.ItemHeight = 18;
-            this.morphListBoxPhoneme.Location = new System.Drawing.Point(14, 12);
-            this.morphListBoxPhoneme.Name = "morphListBoxPhoneme";
-            this.morphListBoxPhoneme.Size = new System.Drawing.Size(205, 76);
-            this.morphListBoxPhoneme.TabIndex = 1;
-            this.morphListBoxPhoneme.MouseDown += new System.Windows.Forms.MouseEventHandler(this.morphListBoxPhoneme_MouseDown);
-            // 
-            // morphListBoxExpression
-            // 
-            this.morphListBoxExpression.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.morphListBoxExpression.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.morphListBoxExpression.FormattingEnabled = true;
-            this.morphListBoxExpression.ItemHeight = 18;
-            this.morphListBoxExpression.Location = new System.Drawing.Point(14, 103);
-            this.morphListBoxExpression.Name = "morphListBoxExpression";
-            this.morphListBoxExpression.Size = new System.Drawing.Size(205, 76);
-            this.morphListBoxExpression.TabIndex = 2;
-            this.morphListBoxExpression.MouseDown += new System.Windows.Forms.MouseEventHandler(this.morphListBoxExpression_MouseDown);
-            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.pbPhonemeImage);
@@ -193,9 +169,32 @@
             this.timeline.Name = "timeline";
             this.timeline.Size = new System.Drawing.Size(844, 467);
             this.timeline.TabIndex = 0;
-            this.timeline.TrackBorderSize = 2;
             this.timeline.TrackHeight = 50;
             this.timeline.TrackSpacing = 1;
+            // 
+            // phonemeListBoxPhoneme
+            // 
+            this.phonemeListBoxPhoneme.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.phonemeListBoxPhoneme.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.phonemeListBoxPhoneme.FormattingEnabled = true;
+            this.phonemeListBoxPhoneme.ItemHeight = 18;
+            this.phonemeListBoxPhoneme.Location = new System.Drawing.Point(14, 12);
+            this.phonemeListBoxPhoneme.Name = "phonemeListBoxPhoneme";
+            this.phonemeListBoxPhoneme.Size = new System.Drawing.Size(205, 76);
+            this.phonemeListBoxPhoneme.TabIndex = 1;
+            this.phonemeListBoxPhoneme.MouseDown += new System.Windows.Forms.MouseEventHandler(this.morphListBoxPhoneme_MouseDown);
+            // 
+            // expressionListBoxExpression
+            // 
+            this.expressionListBoxExpression.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.expressionListBoxExpression.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.expressionListBoxExpression.FormattingEnabled = true;
+            this.expressionListBoxExpression.ItemHeight = 18;
+            this.expressionListBoxExpression.Location = new System.Drawing.Point(14, 103);
+            this.expressionListBoxExpression.Name = "expressionListBoxExpression";
+            this.expressionListBoxExpression.Size = new System.Drawing.Size(205, 76);
+            this.expressionListBoxExpression.TabIndex = 2;
+            this.expressionListBoxExpression.MouseDown += new System.Windows.Forms.MouseEventHandler(this.morphListBoxExpression_MouseDown);
             // 
             // MainForm
             // 
@@ -220,8 +219,8 @@
         #endregion
 
         private LipSyncTimeLineControl.Timeline timeline;
-        private LipSyncTimeLineControl.MorphListBox morphListBoxPhoneme;
-        private LipSyncTimeLineControl.MorphListBox morphListBoxExpression;
+        private LipSyncTimeLineControl.MorphListBox phonemeListBoxPhoneme;
+        private LipSyncTimeLineControl.MorphListBox expressionListBoxExpression;
         private System.Windows.Forms.Button btnSaveProject;
         private System.Windows.Forms.Button btnLoadProject;
         private System.Windows.Forms.Panel panel1;

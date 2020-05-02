@@ -2,7 +2,6 @@
 {
     public enum TimelineTrackTypeEnum
     {
-        None,
         AudioTrack,
         Phoneme,
         Expression,

@@ -16,6 +16,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using LipSyncTimeLineControl.Extension;
 
 namespace LipSyncTimeLineControl
 {
@@ -42,7 +43,7 @@ namespace LipSyncTimeLineControl
 
         [Description("How wide/high the border on a track item should be.")]
         [Category("Layout")]
-        public int TrackBorderSize { get; set; } = 2;
+        public int TrackBorderSize { get; set; } = 1;
 
         [Description("How much space should be left between every track.")]
         [Category("Layout")]
@@ -112,12 +113,13 @@ namespace LipSyncTimeLineControl
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw | ControlStyles.Selectable | ControlStyles.UserPaint, true);
 
             AddPart(new AudioTrackTimelineParts("AudioTrack"));
-            AddPart(new MorphTimelineParts("Phoneme", TimelineTrackTypeEnum.Phoneme));
-            AddPart(new MorphTimelineParts("Expression01", TimelineTrackTypeEnum.Expression));
-            AddPart(new MorphTimelineParts("Expression02", TimelineTrackTypeEnum.Expression));
-            AddPart(new MorphTimelineParts("Expression03", TimelineTrackTypeEnum.Expression));
-            AddPart(new SubtitleTimelineParts("Subtitle"));
+            AddPart(new PhonemeTimelineParts("Phoneme"));
             AddPart(new WordsTimelineParts("Words"));
+            AddPart(new SubtitleTimelineParts("Subtitle"));
+            AddPart(new ExpressionTimelineParts("Expression01"));
+            AddPart(new ExpressionTimelineParts("Expression02"));
+            AddPart(new ExpressionTimelineParts("Expression03"));
+
             _soundPlayerTimer.Interval = 50;
             _soundPlayerTimer.Tick += SoundPlayerTimerTick;
         }
@@ -172,12 +174,7 @@ namespace LipSyncTimeLineControl
 
             foreach (string word in wordsList)
             {
-                float minPosition = 0;
-                if (wordsPart.TrackElements.Count == 0)
-                    minPosition = audioTrackPart.TrackElements[0].End - wordWidth;
-                else
-                    minPosition = wordsPart.TrackElements.Min(x => x.Start) - wordWidth;
-
+                float minPosition = wordsPart.TrackElements.Count == 0 ? audioTrackPart.TrackElements[0].End - wordWidth : wordsPart.TrackElements.Min(x => x.Start) - wordWidth;
                 wordsPart.TrackElements.Add(new WordsTimelineTrack(word, minPosition, minPosition + wordWidth));
             }
 
@@ -199,13 +196,13 @@ namespace LipSyncTimeLineControl
 
             foreach (TimelineTrackBase wordTrack in wordsPart.TrackElements)
             {
-                List<MorphTimelineTrack> phonemeWordsPartList = new List<MorphTimelineTrack>();
+                List<PhonemeTimelineTrack> phonemeWordsPartList = new List<PhonemeTimelineTrack>();
 
                 string word = wordTrack.Name;
 
                 for (int i = 0; i < wordTrack.Name.Length; i++)
                 {
-                    List<MorphTimelineTrack> phonemeTrackList = phonemeWordsPartList.Where(x => x.Start >= wordTrack.Start && x.End <= wordTrack.End).ToList();
+                    List<PhonemeTimelineTrack> phonemeTrackList = phonemeWordsPartList.Where(x => x.Start >= wordTrack.Start && x.End <= wordTrack.End).ToList();
                     float maxPosition = phonemeTrackList.Count == 0 ? wordTrack.Start : phonemeTrackList.Max(y => y.End);
 
                     char letter = wordTrack.Name.ToLower()[i];
@@ -213,12 +210,11 @@ namespace LipSyncTimeLineControl
                     {
                         if (word.Length <= i + 1 || word[i + 1].ToString().IndexOfAny(new[] {'i', 'u'}) == -1)
                         {
-                            string phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["aa"];
-
-                            if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                            if (PhonemeTemplate.GetPhonemeTrackFromTemplate("aa", out PhonemeTimelineTrack morphTrack))
                             {
-                                MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                                phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                                morphTrack.Start = maxPosition;
+                                morphTrack.End = maxPosition + 5;
+                                phonemeWordsPartList.Add(morphTrack);
                             }
                         }
                     }
@@ -228,77 +224,77 @@ namespace LipSyncTimeLineControl
                         {
                             if (previous == 'i')
                             {
-                                string phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["iy"];
-                                if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                                if (PhonemeTemplate.GetPhonemeTrackFromTemplate("iy", out PhonemeTimelineTrack morphTrack))
                                 {
-                                    MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                                    phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                                    morphTrack.Start = maxPosition;
+                                    morphTrack.End = maxPosition + 5;
+                                    phonemeWordsPartList.Add(morphTrack);
                                 }
                             }
                             else
                             {
-                                string phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["eh"];
-                                if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                                if (PhonemeTemplate.GetPhonemeTrackFromTemplate("eh", out PhonemeTimelineTrack morphTrack))
                                 {
-                                    MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                                    phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                                    morphTrack.Start = maxPosition;
+                                    morphTrack.End = maxPosition + 5;
+                                    phonemeWordsPartList.Add(morphTrack);
                                 }
                             }
                         }
                     }
                     else if (letter == 'i')
                     {
-                        string phonemeName;
+                        string phonemeTemplateName;
 
                         switch (previous)
                         {
                             case 'a':
-                                phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["ay"];
+                                phonemeTemplateName = "ay";
                                 break;
                             case 'e':
-                                phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["ey"];
+                                phonemeTemplateName = "ey";
                                 break;
                             case 'o':
-                                phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["oy"];
+                                phonemeTemplateName = "oy";
                                 break;
                             case 'u':
-                                phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["uw"];
+                                phonemeTemplateName = "uw";
                                 break;
                             case 'y':
-                                phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["iy"];
+                                phonemeTemplateName = "iy";
                                 break;
                             default:
-                                phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["ih"];
+                                phonemeTemplateName = "ih";
                                 break;
                         }
 
-                        if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                        if (PhonemeTemplate.GetPhonemeTrackFromTemplate(phonemeTemplateName, out PhonemeTimelineTrack morphTrack))
                         {
-                            MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                            phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                            morphTrack.Start = maxPosition;
+                            morphTrack.End = maxPosition + 5;
+                            phonemeWordsPartList.Add(morphTrack);
                         }
                     }
                     else if (letter == 'o')
                     {
                         if (word.Length <= i + 1 || word[i + 1].ToString().IndexOfAny(new[] {'i', 'u'}) == -1)
                         {
-                            string phonemeName;
                             if (previous == 'u')
                             {
-                                phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["ow"];
-                                if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                                if (PhonemeTemplate.GetPhonemeTrackFromTemplate("ow", out PhonemeTimelineTrack morphTrack))
                                 {
-                                    MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                                    phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                                    morphTrack.Start = maxPosition;
+                                    morphTrack.End = maxPosition + 5;
+                                    phonemeWordsPartList.Add(morphTrack);
                                 }
                             }
                             else
                             {
-                                phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["oy"];
-                                if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                                if (PhonemeTemplate.GetPhonemeTrackFromTemplate("oy", out PhonemeTimelineTrack morphTrack))
                                 {
-                                    MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                                    phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                                    morphTrack.Start = maxPosition;
+                                    morphTrack.End = maxPosition + 5;
+                                    phonemeWordsPartList.Add(morphTrack);
                                 }
                             }
                         }
@@ -307,25 +303,26 @@ namespace LipSyncTimeLineControl
                     {
                         if (word.Length <= i + 1 || word[i + 1] != 'i')
                         {
-                            string phonemeName;
+                            string phonemeTemplateName;
 
                             switch (previous)
                             {
                                 case 'a':
-                                    phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["aw"];
+                                    phonemeTemplateName = "aw";
                                     break;
                                 case 'o':
-                                    phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["ow"];
+                                    phonemeTemplateName = "ow";
                                     break;
                                 default:
-                                    phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["uh"];
+                                    phonemeTemplateName = "uh";
                                     break;
                             }
 
-                            if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                            if (PhonemeTemplate.GetPhonemeTrackFromTemplate(phonemeTemplateName, out PhonemeTimelineTrack morphTrack))
                             {
-                                MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                                phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                                morphTrack.Start = maxPosition;
+                                morphTrack.End = maxPosition + 5;
+                                phonemeWordsPartList.Add(morphTrack);
                             }
                         }
                     }
@@ -333,53 +330,52 @@ namespace LipSyncTimeLineControl
                     {
                         if (word.Length <= i + 1 || word[i + 1] != 'i')
                         {
-                            string phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["uw"];
-                            if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                            if (PhonemeTemplate.GetPhonemeTrackFromTemplate("uw", out PhonemeTimelineTrack morphTrack))
                             {
-                                MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                                phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                                morphTrack.Start = maxPosition;
+                                morphTrack.End = maxPosition + 5;
+                                phonemeWordsPartList.Add(morphTrack);
                             }
                         }
                     }
                     else if (letter == 'g')
                     {
-                        string phonemeName = previous == 'n' ? PhonemeTemplate.PhonemeTemplateDictionary["ng"] : PhonemeTemplate.PhonemeTemplateDictionary["g"];
-                        if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                        string phonemeTemplateName = previous == 'n' ? "ng" : "g";
+
+                        if (PhonemeTemplate.GetPhonemeTrackFromTemplate(phonemeTemplateName, out PhonemeTimelineTrack morphTrack))
                         {
-                            MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                            phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                            morphTrack.Start = maxPosition;
+                            morphTrack.End = maxPosition + 5;
+                            phonemeWordsPartList.Add(morphTrack);
                         }
                     }
                     else if (letter == 'n')
                     {
                         if (word.Length <= i + 1 || word[i + 1] != 'i')
                         {
-                            string phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["n"];
-                            if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                            if (PhonemeTemplate.GetPhonemeTrackFromTemplate("n", out PhonemeTimelineTrack morphTrack))
                             {
-                                MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                                phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                                morphTrack.Start = maxPosition;
+                                morphTrack.End = maxPosition + 5;
+                                phonemeWordsPartList.Add(morphTrack);
                             }
                         }
                     }
                     else
                     {
-                        if (PhonemeTemplate.PhonemeTemplateDictionary.ContainsKey(letter.ToString()))
+                        if (PhonemeTemplate.GetPhonemeTrackFromTemplate(letter.ToString(), out PhonemeTimelineTrack mt))
                         {
-                            string phonemeName = PhonemeTemplate.PhonemeTemplateDictionary[letter.ToString()];
-                            if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
-                            {
-                                MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                                phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
-                            }
+                            mt.Start = maxPosition;
+                            mt.End = maxPosition + 5;
+                            phonemeWordsPartList.Add(mt);
                         }
                         else
                         {
-                            string phonemeName = PhonemeTemplate.PhonemeTemplateDictionary["th"];
-                            if (MorphTemplate.MorphTemplateDictionary.ContainsKey(phonemeName))
+                            if (PhonemeTemplate.GetPhonemeTrackFromTemplate("th", out PhonemeTimelineTrack morphTrack))
                             {
-                                MorphTimelineTrack morphTrack = MorphTemplate.MorphTemplateDictionary[phonemeName];
-                                phonemeWordsPartList.Add(new MorphTimelineTrack(phonemeName, maxPosition, maxPosition + 5, morphTrack.Value, TimelineTrackTypeEnum.Phoneme, morphTrack.Bitmap));
+                                morphTrack.Start = maxPosition;
+                                morphTrack.End = maxPosition + 5;
+                                phonemeWordsPartList.Add(morphTrack);
                             }
                         }
                     }
@@ -388,17 +384,26 @@ namespace LipSyncTimeLineControl
                 }
 
                 float wordTrackLength = (float)Math.Round(wordTrack.End - wordTrack.Start);
-                float phonemeLength = (float)Math.Round(wordTrackLength / phonemeWordsPartList.Count);
+                float phonemeTotalDuration = phonemeWordsPartList.Sum(x => PhonemeTemplate.GetPhonemeDuration(x.Name));
+                float phonemeRatio = wordTrackLength / phonemeTotalDuration;
 
-                float phonemePosition = 0;
-                if (phonemeWordsPartList.Count > 0)
-                    phonemePosition = phonemeWordsPartList[0].Start;
-
-                foreach (MorphTimelineTrack phonemeWordsPart in phonemeWordsPartList)
+                for (int index = 0; index < phonemeWordsPartList.Count; index++)
                 {
-                    phonemeWordsPart.Start = phonemePosition;
-                    phonemeWordsPart.End = phonemePosition + phonemeLength;
-                    phonemePosition = phonemeWordsPart.End;
+                    if (index == 0)
+                    {
+                        phonemeWordsPartList[index].Start = wordTrack.Start;
+                        phonemeWordsPartList[index].End = (float)Math.Round(phonemeWordsPartList[index].Start + PhonemeTemplate.GetPhonemeDuration(phonemeWordsPartList[index].Name) * phonemeRatio);
+                    }
+                    else if (index == phonemeWordsPartList.Count - 1)
+                    {
+                        phonemeWordsPartList[index].Start = phonemeWordsPartList[index - 1].End;
+                        phonemeWordsPartList[index].End = wordTrack.End;
+                    }
+                    else
+                    {
+                        phonemeWordsPartList[index].Start = phonemeWordsPartList[index - 1].End;
+                        phonemeWordsPartList[index].End = (float)Math.Round(phonemeWordsPartList[index].Start + PhonemeTemplate.GetPhonemeDuration(phonemeWordsPartList[index].Name) * phonemeRatio);
+                    }
                 }
 
                 phonemePart.TrackElements.AddRange(phonemeWordsPartList);
@@ -450,12 +455,6 @@ namespace LipSyncTimeLineControl
             }
         }
 
-        // {"AudioTrack":{"Name":"","Start":0.0,"End":0.0,"Value":1.0},
-        // "Phoneme":[{"Name":"","Start":0.0,"End":0.0,"Value":1.0}],
-        // "Expression01":[{"Name":"","Start":0.0,"End":0.0,"Value":1.0}],
-        // "Expression02":[{"Name":"","Start":0.0,"End":0.0,"Value":1.0}],
-        // "Expression03":[{"Name":"","Start":0.0,"End":0.0,"Value":1.0}]}
-        // "Subtitle":[{"Name":"","Start":0.0,"End":0.0,"Value":1.0}]}
         public void SaveProject()
         {
             Dictionary<string, JToken> partsDictionary = new Dictionary<string, JToken>();
@@ -581,11 +580,6 @@ namespace LipSyncTimeLineControl
             }
         }
 
-        // {"Phoneme":[{"Name":"","Start":0.0,"End":0.0,"Value":1.0}],
-        // "Expression01":[{"Name":"","Start":0.0,"End":0.0,"Value":1.0}],
-        // "Expression02":[{"Name":"","Start":0.0,"End":0.0,"Value":1.0}],
-        // "Expression03":[{"Name":"","Start":0.0,"End":0.0,"Value":1.0}]}
-        // "Subtitle":[{"Name":"","Start":0.0,"End":0.0,"Value":1.0}]}
         public void Export()
         {
             List<JObject> partObjectList = new List<JObject>();
@@ -749,10 +743,16 @@ namespace LipSyncTimeLineControl
                                 float start = (float) partObject.GetValue("Start") * 100;
                                 float end = (float) partObject.GetValue("End") * 100;
                                 float value = (float) partObject.GetValue("Value");
-                                Bitmap bitmap = MorphTemplate.MorphTemplateDictionary.FirstOrDefault(x => x.Key == name).Value?.Bitmap;
 
-                                if (MorphTemplate.MorphTemplateDictionary.Any(x => x.Key == name))
-                                    part.TrackElements.Add(new MorphTimelineTrack(name, start, end, value, TimelineTrackTypeEnum.Phoneme, bitmap));
+                                if (PhonemeTemplate.GetPhonemeTrackFromName(name, out PhonemeTimelineTrack morphTrack))
+                                {
+                                    morphTrack.Start = start;
+                                    morphTrack.End = end;
+                                    morphTrack.Value = value;
+                                    morphTrack.TimelineTrackType = TimelineTrackTypeEnum.Phoneme;
+
+                                    part.TrackElements.Add(morphTrack);
+                                }
                             }
                             break;
                         }
@@ -772,8 +772,15 @@ namespace LipSyncTimeLineControl
                                     float end = (float) partObject.GetValue("End") * 100;
                                     float value = (float) partObject.GetValue("Value");
 
-                                    if (MorphTemplate.MorphTemplateDictionary.Any(x => x.Key == name))
-                                        part.TrackElements.Add(new MorphTimelineTrack(name, start, end, value, TimelineTrackTypeEnum.Expression));
+                                    if (ExpressionTemplate.GetExpressionTrackFromName(name, out ExpressionTimelineTrack morphTrack))
+                                    {
+                                        morphTrack.Start = start;
+                                        morphTrack.End = end;
+                                        morphTrack.Value = value;
+                                        morphTrack.TimelineTrackType = TimelineTrackTypeEnum.Expression;
+
+                                        part.TrackElements.Add(morphTrack);
+                                    }
                                 }
                             }
                             break;
@@ -834,7 +841,7 @@ namespace LipSyncTimeLineControl
 
         public TimelineTrackBase GetCurrentPhonemeFromElapsedTime(double elapsedTime)
         {
-            foreach (TimelinePartBase part in _parts.Where(x => x.Name == "Phoneme"))
+            foreach (TimelinePartBase part in _parts.Where(x => x.TimelineTrackType == TimelineTrackTypeEnum.Phoneme))
             {
                 foreach (TimelineTrackBase trackElement in part.TrackElements)
                 {
@@ -978,6 +985,9 @@ namespace LipSyncTimeLineControl
 
         private void Redraw(Graphics graphics)
         {
+            graphics.CompositingQuality = CompositingQuality.HighQuality;
+            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
             graphics.Clear(BackgroundColor);
 
             DrawBackground(graphics);
@@ -1044,8 +1054,6 @@ namespace LipSyncTimeLineControl
         {
             Rectangle trackAreaBounds = GetTrackAreaBounds();
 
-            List<Color> colors = ColorHelper.GetRandomColors(_parts.Count);
-
             for (int indexTrack = 0; indexTrack < _parts.Count; indexTrack++)
             {
                 TimelinePartBase part = _parts[indexTrack];
@@ -1057,23 +1065,26 @@ namespace LipSyncTimeLineControl
                     if (!trackAreaBounds.IntersectsWith(trackExtent.ToRectangle()))
                         continue;
 
-                    int trackIndex = TrackIndexForTrack(track);
 
-                    Color trackColor = ColorHelper.AdjustColor(colors[trackIndex], 0, -0.1, -0.2);
-                    Color borderColor = Color.FromArgb(128, Color.Black);
+                    Color borderColor = part.BorderColor;
 
                     if (_selectedTracks.Contains(track))
-                        borderColor = Color.WhiteSmoke;
+                        borderColor = Color.FloralWhite;
 
-                    graphics.FillRectangle(track is SurrogateTrack ? new SolidBrush(Color.FromArgb(128, trackColor)) : new SolidBrush(trackColor), trackExtent);
+                    LinearGradientBrush solidBrush;
+                    if (track is SurrogateTrack)
+                        solidBrush = new LinearGradientBrush(trackExtent, Color.FromArgb(128, part.GradientColor), Color.FromArgb(128, part.BackColor), LinearGradientMode.Vertical);
+                    else
+                        solidBrush = new LinearGradientBrush(trackExtent, part.GradientColor, part.BackColor, LinearGradientMode.Vertical);
+
+                    graphics.FillRoundedRectangle(solidBrush, trackExtent, 10, RectangleEdgeFilter.BottomLeft | RectangleEdgeFilter.TopRight);
 
                     trackExtent.X += TrackBorderSize / 2f;
                     trackExtent.Y += TrackBorderSize / 2f;
                     trackExtent.Height -= TrackBorderSize;
                     trackExtent.Width -= TrackBorderSize;
 
-                    graphics.DrawRectangle(new Pen(borderColor, TrackBorderSize), trackExtent.X, trackExtent.Y,
-                        trackExtent.Width, trackExtent.Height);
+                    graphics.DrawRoundedRectangle(new Pen(borderColor, TrackBorderSize), trackExtent, 10, RectangleEdgeFilter.BottomLeft | RectangleEdgeFilter.TopRight);
 
                     using (Font font = new Font("Arial", 6, FontStyle.Bold, GraphicsUnit.Point))
                     {
@@ -1093,31 +1104,36 @@ namespace LipSyncTimeLineControl
         {
             Rectangle trackAreaBounds = GetTrackAreaBounds();
 
-            List<Color> colors = ColorHelper.GetRandomColors(_parts.Count);
-
             foreach (TimelineTrackBase track in tracks)
             {
                 int trackIndex = TrackIndexForTrack(track);
+
+                TimelinePartBase part = _parts[trackIndex];
 
                 RectangleF trackExtent = BoundsHelper.GetTrackExtents(track, this, trackIndex);
 
                 if (!trackAreaBounds.IntersectsWith(trackExtent.ToRectangle()))
                     continue;
 
-                Color trackColor = ColorHelper.AdjustColor(colors[trackIndex], 0, -0.1, -0.2);
-                Color borderColor = Color.FromArgb(128, Color.Black);
+                Color borderColor = part.BorderColor;
 
                 if (_selectedTracks.Contains(track))
-                    borderColor = Color.WhiteSmoke;
+                    borderColor = Color.FloralWhite;
 
-                graphics.FillRectangle(track is SurrogateTrack ? new SolidBrush(Color.FromArgb(128, trackColor)) : new SolidBrush(trackColor), trackExtent);
+                LinearGradientBrush solidBrush;
+                if (track is SurrogateTrack)
+                    solidBrush = new LinearGradientBrush(trackExtent, Color.FromArgb(128, part.GradientColor), Color.FromArgb(128, part.BackColor), LinearGradientMode.Vertical);
+                else
+                    solidBrush = new LinearGradientBrush(trackExtent, part.GradientColor, part.BackColor, LinearGradientMode.Vertical);
+
+                graphics.FillRoundedRectangle(solidBrush, trackExtent, 10, RectangleEdgeFilter.BottomLeft | RectangleEdgeFilter.TopRight);
 
                 trackExtent.X += TrackBorderSize / 2f;
                 trackExtent.Y += TrackBorderSize / 2f;
                 trackExtent.Height -= TrackBorderSize;
                 trackExtent.Width -= TrackBorderSize;
 
-                graphics.DrawRectangle(new Pen(borderColor, TrackBorderSize), trackExtent.X, trackExtent.Y, trackExtent.Width, trackExtent.Height);
+                graphics.DrawRoundedRectangle(new Pen(borderColor, TrackBorderSize), trackExtent, 10, RectangleEdgeFilter.BottomLeft | RectangleEdgeFilter.TopRight);
             }
         }
 
@@ -1802,20 +1818,40 @@ namespace LipSyncTimeLineControl
             TimelinePartBase part = PartTimelineHitTest(location);
             if (part != null)
             {
-                if (e.Data.GetData(typeof(MorphTimelineTrack)) is MorphTimelineTrack morphTimelineTrack)
+                if (e.Data.GetData(typeof(PhonemeTimelineTrack)) is PhonemeTimelineTrack phonemeTimelineTrack)
                 {
-                    Console.WriteLine(morphTimelineTrack.Name);
+                    Console.WriteLine(phonemeTimelineTrack.Name);
 
-                    if (part.TimelineTrackType == morphTimelineTrack.TimelineTrackType)
+                    if (part.TimelineTrackType == phonemeTimelineTrack.TimelineTrackType)
                     {
                         Rectangle trackAreaBounds = GetTrackAreaBounds();
                         _renderingScale.X = Math.Max(0.01f, _renderingScale.X);
 
                         float locateX = (location.X - _renderingOffset.X - trackAreaBounds.X) * (1 / _renderingScale.X);
 
-                        MorphTimelineTrack morphTrack = new MorphTimelineTrack(morphTimelineTrack.Name, locateX, locateX + morphTimelineTrack.End, morphTimelineTrack.Value, morphTimelineTrack.TimelineTrackType, morphTimelineTrack.Bitmap);
+                        PhonemeTimelineTrack phonemeTrack = new PhonemeTimelineTrack(phonemeTimelineTrack.Name, locateX, locateX + phonemeTimelineTrack.End, phonemeTimelineTrack.Value);
 
-                        part.TrackElements.Add(morphTrack);
+                        part.TrackElements.Add(phonemeTrack);
+
+                        RecalculateScrollbarBounds();
+                        Invalidate();
+                    }
+                }
+
+                if (e.Data.GetData(typeof(ExpressionTimelineTrack)) is ExpressionTimelineTrack expressionTimelineTrack)
+                {
+                    Console.WriteLine(expressionTimelineTrack.Name);
+
+                    if (part.TimelineTrackType == expressionTimelineTrack.TimelineTrackType)
+                    {
+                        Rectangle trackAreaBounds = GetTrackAreaBounds();
+                        _renderingScale.X = Math.Max(0.01f, _renderingScale.X);
+
+                        float locateX = (location.X - _renderingOffset.X - trackAreaBounds.X) * (1 / _renderingScale.X);
+
+                        PhonemeTimelineTrack phonemeTrack = new PhonemeTimelineTrack(expressionTimelineTrack.Name, locateX, locateX + expressionTimelineTrack.End, expressionTimelineTrack.Value);
+
+                        part.TrackElements.Add(phonemeTrack);
 
                         RecalculateScrollbarBounds();
                         Invalidate();

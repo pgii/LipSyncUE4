@@ -70,12 +70,14 @@
     <Compile Include="Enums\RectangleEdgeEnum.cs" />
     <Compile Include="Events\SoundPlayerTickEventsArgs.cs" />
     <Compile Include="Events\SelectionChangedEventsArgs.cs" />
+    <Compile Include="Extension\GraphicsExtension.cs" />
     <Compile Include="Helper\BoundsHelper.cs" />
-    <Compile Include="Helper\ColorHelper.cs" />
     <Compile Include="Helper\Extensions.cs" />
     <Compile Include="Helper\RectangleHelper.cs" />
     <Compile Include="Helper\SelectionHelper.cs" />
     <Compile Include="Helper\SurrogateHelper.cs" />
+    <Compile Include="Models\ExpressionTimelineParts.cs" />
+    <Compile Include="Models\ExpressionTimelineTrack.cs" />
     <Compile Include="Models\WordsTimelineParts.cs" />
     <Compile Include="Models\WordsTimelineTrack.cs" />
     <Compile Include="Models\TimelinePartBase.cs" />
@@ -86,11 +88,11 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\AudioTrackTimelineParts.cs" />
-    <Compile Include="Models\MorphTimelineParts.cs" />
+    <Compile Include="Models\PhonemeTimelineParts.cs" />
     <Compile Include="Models\AudioTrackTimelineTrack.cs" />
-    <Compile Include="Models\MorphTimelineTrack.cs" />
+    <Compile Include="Models\PhonemeTimelineTrack.cs" />
+    <Compile Include="ExpressionTemplate.cs" />
     <Compile Include="PhonemeTemplate.cs" />
-    <Compile Include="MorphTemplate.cs" />
     <Compile Include="Popup\PopupContextContainer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -220,6 +222,7 @@
   <ItemGroup>
     <None Include="Resources\Phoneme_AI.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

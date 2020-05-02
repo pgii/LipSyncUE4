@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using LipSyncTimeLineControl.Enums;
+﻿using LipSyncTimeLineControl.Enums;
 
 namespace LipSyncTimeLineControl.Models
 {
@@ -11,7 +10,6 @@ namespace LipSyncTimeLineControl.Models
         public sealed override float Value { get; set; }
         public sealed override TimelineTrackTypeEnum TimelineTrackType { get; set; }
         public sealed override bool IsLocked { get; set; }
-        public sealed override Bitmap Bitmap { get; set; }
 
         public AudioTrackTimelineTrack(string name, float start, float end, bool locked)
         {

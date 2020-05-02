@@ -14,15 +14,15 @@ namespace LipSyncTimeLineControl
         {
             const TextFormatFlags flags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter;
 
-            if (e.Index >= 0)
-            {
-                e.DrawBackground();
+            if (e.Index < 0) 
+                return;
 
-                if (e.Index >= 0 && e.Index < Items.Count && Items[e.Index] is TimelineTrackBase timelineTrack)
-                {
-                    TextRenderer.DrawText(e.Graphics, timelineTrack.Name, e.Font, e.Bounds, e.ForeColor, flags);
-                    e.DrawFocusRectangle();
-                }
+            e.DrawBackground();
+
+            if (e.Index >= 0 && e.Index < Items.Count && Items[e.Index] is TimelineTrackBase timelineTrack)
+            {
+                TextRenderer.DrawText(e.Graphics, timelineTrack.Name, e.Font, e.Bounds, e.ForeColor, flags);
+                e.DrawFocusRectangle();
             }
         }
     }
