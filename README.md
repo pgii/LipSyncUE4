@@ -10,6 +10,10 @@ Upd:
 
 https://youtu.be/AFBuQ8ah9ng
 
+Used plugin: https://github.com/getnamo/udp-ue4
+
+Download from this page https://github.com/getnamo/udp-ue4/releases and put the Plugins folder from archive in to the root of your project.
+
 Upd: Added Phoneme Duration.
 ```
 {"AI", 5.0f}, {"E", 4.5f}, {"U", 4.0f}, {"O", 4.0f}, {"TH", 2.0f}, {"FV", 2.5f}, {"L", 3.0f}, {"MBP", 1.5f}, {"WQ", 4.0f}
