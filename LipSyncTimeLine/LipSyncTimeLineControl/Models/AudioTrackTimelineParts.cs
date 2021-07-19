@@ -15,7 +15,7 @@ namespace LipSyncTimeLineControl.Models
         {
             Name = name;
             TimelineTrackType = TimelineTrackTypeEnum.AudioTrack;
-            TrackElements.Add(new AudioTrackTimelineTrack("AudioTrack", 0, 700, true));
+            TrackElements.Add(new AudioTrackTimelineTrack("", 0, 700, true));
             BackColor = ColorTranslator.FromHtml("#BE3730");
             GradientColor = ColorTranslator.FromHtml("#EC5D59");
             BorderColor = ColorTranslator.FromHtml("#9F3936");

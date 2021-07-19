@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using LipSyncTimeLineControl.Enums;
 
 namespace LipSyncTimeLineControl.Extension
 {
     internal static class GraphicsExtension
     {
-		private static GraphicsPath GenerateRoundedRectangle(RectangleF rectangle, float radius, RectangleEdgeFilter filter)
+		private static GraphicsPath GenerateRoundedRectangle(RectangleF rectangle, float radius, RectangleEdgeFilterEnum.RectangleEdgeFilter filter)
 		{
             GraphicsPath path = new GraphicsPath();
-			if (radius <= 0.0F || filter == RectangleEdgeFilter.None)
+
+			if (radius <= 0.0F || filter == RectangleEdgeFilterEnum.RectangleEdgeFilter.None)
 			{
 				path.AddRectangle(rectangle);
 				path.CloseFigure();
@@ -19,11 +21,11 @@ namespace LipSyncTimeLineControl.Extension
             if (radius >= Math.Min(rectangle.Width, rectangle.Height) / 2.0)
                 return GenerateCapsule(rectangle);
 
-            var diameter = radius * 2.0F;
+            float diameter = radius * 2.0F;
             SizeF sizeF = new SizeF(diameter, diameter);
             RectangleF arc = new RectangleF(rectangle.Location, sizeF);
 
-            if ((RectangleEdgeFilter.TopLeft & filter) == RectangleEdgeFilter.TopLeft)
+            if ((RectangleEdgeFilterEnum.RectangleEdgeFilter.TopLeft & filter) == RectangleEdgeFilterEnum.RectangleEdgeFilter.TopLeft)
             {
                 path.AddArc(arc, 180, 90);
             }
@@ -32,9 +34,10 @@ namespace LipSyncTimeLineControl.Extension
                 path.AddLine(arc.X, arc.Y + arc.Height, arc.X, arc.Y);
                 path.AddLine(arc.X, arc.Y, arc.X + arc.Width, arc.Y);
             }
+
             arc.X = rectangle.Right - diameter;
 
-            if ((RectangleEdgeFilter.TopRight & filter) == RectangleEdgeFilter.TopRight)
+            if ((RectangleEdgeFilterEnum.RectangleEdgeFilter.TopRight & filter) == RectangleEdgeFilterEnum.RectangleEdgeFilter.TopRight)
             {
                 path.AddArc(arc, 270, 90);
             }
@@ -43,8 +46,10 @@ namespace LipSyncTimeLineControl.Extension
                 path.AddLine(arc.X, arc.Y, arc.X + arc.Width, arc.Y);
                 path.AddLine(arc.X + arc.Width, arc.Y + arc.Height, arc.X + arc.Width, arc.Y);
             }
+
             arc.Y = rectangle.Bottom - diameter;
-            if ((RectangleEdgeFilter.BottomRight & filter) == RectangleEdgeFilter.BottomRight)
+
+            if ((RectangleEdgeFilterEnum.RectangleEdgeFilter.BottomRight & filter) == RectangleEdgeFilterEnum.RectangleEdgeFilter.BottomRight)
             {
                 path.AddArc(arc, 0, 90);
             }
@@ -53,8 +58,10 @@ namespace LipSyncTimeLineControl.Extension
                 path.AddLine(arc.X + arc.Width, arc.Y, arc.X + arc.Width, arc.Y + arc.Height);
                 path.AddLine(arc.X, arc.Y + arc.Height, arc.X + arc.Width, arc.Y + arc.Height);
             }
+
             arc.X = rectangle.Left;
-            if ((RectangleEdgeFilter.BottomLeft & filter) == RectangleEdgeFilter.BottomLeft)
+
+            if ((RectangleEdgeFilterEnum.RectangleEdgeFilter.BottomLeft & filter) == RectangleEdgeFilterEnum.RectangleEdgeFilter.BottomLeft)
             {
                 path.AddArc(arc, 90, 90);
             }
@@ -63,7 +70,9 @@ namespace LipSyncTimeLineControl.Extension
                 path.AddLine(arc.X + arc.Width, arc.Y + arc.Height, arc.X, arc.Y + arc.Height);
                 path.AddLine(arc.X, arc.Y + arc.Height, arc.X, arc.Y);
             }
+
             path.CloseFigure();
+
             return path;
 		}
 		private static GraphicsPath GenerateCapsule(RectangleF rectangle)
@@ -100,38 +109,29 @@ namespace LipSyncTimeLineControl.Extension
 			finally { path.CloseFigure(); }
 			return path;
 		}
-		public static void DrawRoundedRectangle(this Graphics graphics, Pen pen, float x, float y, float width, float height, float radius, RectangleEdgeFilter filter)
+		public static void DrawRoundedRectangle(this Graphics graphics, Pen pen, float x, float y, float width, float height, float radius, RectangleEdgeFilterEnum.RectangleEdgeFilter filter)
 		{
 			RectangleF rectangle = new RectangleF(x, y, width, height);
 			GraphicsPath path = GenerateRoundedRectangle(rectangle, radius, filter);
             graphics.DrawPath(pen, path);
         }
 
-        public static void DrawRoundedRectangle(this Graphics graphics, Pen pen, RectangleF rectangle, int radius, RectangleEdgeFilter filter)
+        public static void DrawRoundedRectangle(this Graphics graphics, Pen pen, RectangleF rectangle, int radius, RectangleEdgeFilterEnum.RectangleEdgeFilter filter)
 		{
 			graphics.DrawRoundedRectangle(pen, rectangle.X,	rectangle.Y, rectangle.Width, rectangle.Height, radius, filter);
 		}
 
-        public static void FillRoundedRectangle(this Graphics graphics, Brush brush, float x, float y, float width, float height, float radius, RectangleEdgeFilter filter)
+        public static void FillRoundedRectangle(this Graphics graphics, Brush brush, float x, float y, float width, float height, float radius, RectangleEdgeFilterEnum.RectangleEdgeFilter filter)
 		{
 			RectangleF rectangle = new RectangleF(x, y, width, height);
 			GraphicsPath path = GenerateRoundedRectangle(rectangle, radius, filter);
             graphics.FillPath(brush, path);
         }
 
-        public static void FillRoundedRectangle(this Graphics graphics, Brush brush, RectangleF rectangle, int radius, RectangleEdgeFilter filter)
+        public static void FillRoundedRectangle(this Graphics graphics, Brush brush, RectangleF rectangle, int radius, RectangleEdgeFilterEnum.RectangleEdgeFilter filter)
 		{
 			graphics.FillRoundedRectangle(brush, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height, radius, filter);
 		}
     }
-	[Flags]
-    public enum RectangleEdgeFilter
-	{
-		None = 0,
-		TopLeft = 1,
-		TopRight = 2,
-		BottomLeft = 4,
-		BottomRight = 8,
-		All = TopLeft | TopRight | BottomLeft | BottomRight
-	}
+
 }

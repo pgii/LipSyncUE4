@@ -54,11 +54,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NAudio, Version=1.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NAudio.1.9.0\lib\net35\NAudio.dll</HintPath>
+    <Reference Include="CSCore, Version=1.2.1.2, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSCore.1.2.1.2\lib\net35-client\CSCore.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -68,11 +68,15 @@
   <ItemGroup>
     <Compile Include="Enums\BehaviorModeEnum.cs" />
     <Compile Include="Enums\RectangleEdgeEnum.cs" />
+    <Compile Include="Enums\RectangleEdgeFilterEnum.cs" />
+    <Compile Include="Events\AudioTrackChangedEventsArgs.cs" />
+    <Compile Include="Events\TimeChangeEventsArgs.cs" />
     <Compile Include="Events\SoundPlayerTickEventsArgs.cs" />
     <Compile Include="Events\SelectionChangedEventsArgs.cs" />
+    <Compile Include="Extension\CommonExtension.cs" />
     <Compile Include="Extension\GraphicsExtension.cs" />
     <Compile Include="Helper\BoundsHelper.cs" />
-    <Compile Include="Helper\Extensions.cs" />
+    <Compile Include="Extension\RectangleExtension.cs" />
     <Compile Include="Helper\RectangleHelper.cs" />
     <Compile Include="Helper\SelectionHelper.cs" />
     <Compile Include="Helper\SurrogateHelper.cs" />
@@ -84,37 +88,38 @@
     <Compile Include="Models\SubtitleTimelineParts.cs" />
     <Compile Include="Models\SubtitleTimelineTrack.cs" />
     <Compile Include="Models\TimelineTrackBase.cs" />
-    <Compile Include="MorphListBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Models\AudioTrackTimelineParts.cs" />
     <Compile Include="Models\PhonemeTimelineParts.cs" />
     <Compile Include="Models\AudioTrackTimelineTrack.cs" />
     <Compile Include="Models\PhonemeTimelineTrack.cs" />
-    <Compile Include="ExpressionTemplate.cs" />
-    <Compile Include="PhonemeTemplate.cs" />
-    <Compile Include="Popup\PopupContextContainer.cs">
+    <Compile Include="Template\ExpressionTemplate.cs" />
+    <Compile Include="Utils\MultimediaTimer.cs" />
+    <Compile Include="Controls\MusicPlayer.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Popup\PopupContextContainer.Designer.cs">
+    <Compile Include="Template\PhonemeTemplate.cs" />
+    <Compile Include="Controls\PopupContextContainer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PopupContextContainer.Designer.cs">
       <DependentUpon>PopupContextContainer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Popup\PopupContextControl.cs">
+    <Compile Include="Controls\PopupContextControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Popup\PopupContextControl.Designer.cs">
+    <Compile Include="Controls\PopupContextControl.Designer.cs">
       <DependentUpon>PopupContextControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Popup\PopupContextTrackText.cs">
+    <Compile Include="Controls\PopupContextTrackText.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Popup\PopupContextTrackText.Designer.cs">
+    <Compile Include="Controls\PopupContextTrackText.Designer.cs">
       <DependentUpon>PopupContextTrackText.cs</DependentUpon>
     </Compile>
-    <Compile Include="Popup\PopupContextTrackValue.cs">
+    <Compile Include="Controls\PopupContextTrackValue.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Popup\PopupContextTrackValue.Designer.cs">
+    <Compile Include="Controls\PopupContextTrackValue.Designer.cs">
       <DependentUpon>PopupContextTrackValue.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -123,104 +128,106 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Scrollbar\VerticalScrollbar.cs">
+    <Compile Include="Controls\VerticalScrollbar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Scrollbar\VerticalScrollbar.Designer.cs">
+    <Compile Include="Controls\VerticalScrollbar.Designer.cs">
       <DependentUpon>VerticalScrollbar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scrollbar\HorizontalScrollbar.cs">
+    <Compile Include="Controls\HorizontalScrollbar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Scrollbar\HorizontalScrollbar.Designer.cs">
+    <Compile Include="Controls\HorizontalScrollbar.Designer.cs">
       <DependentUpon>HorizontalScrollbar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scrollbar\AbstractScrollbar.cs">
+    <Compile Include="Controls\AbstractScrollbar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Scrollbar\AbstractScrollbar.Designer.cs">
+    <Compile Include="Controls\AbstractScrollbar.Designer.cs">
       <DependentUpon>AbstractScrollbar.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\SurrogateTrack.cs" />
-    <Compile Include="LipSyncTimeLineClock.cs" />
-    <Compile Include="Timeline.cs">
+    <Compile Include="Utils\LipSyncTimeLineClock.cs" />
+    <Compile Include="Helper\SettingsHelper.cs" />
+    <Compile Include="Controls\Timeline.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Timeline.Designer.cs">
+    <Compile Include="Controls\Timeline.Designer.cs">
       <DependentUpon>Timeline.cs</DependentUpon>
     </Compile>
     <Compile Include="Enums\TimelineTrackTypeEnum.cs" />
-    <Compile Include="ToolTipCustom\ToolTipTrack.cs">
+    <Compile Include="Controls\ToolTipTrack.cs">
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Popup\PopupContextControl.resx">
+    <EmbeddedResource Include="Controls\PopupContextControl.resx">
       <DependentUpon>PopupContextControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Popup\PopupContextTrackText.resx">
+    <EmbeddedResource Include="Controls\PopupContextTrackText.resx">
       <DependentUpon>PopupContextTrackText.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Popup\PopupContextTrackValue.resx">
+    <EmbeddedResource Include="Controls\PopupContextTrackValue.resx">
       <DependentUpon>PopupContextTrackValue.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Scrollbar\AbstractScrollbar.resx">
+    <EmbeddedResource Include="Controls\AbstractScrollbar.resx">
       <DependentUpon>AbstractScrollbar.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Scrollbar\VerticalScrollbar.resx">
+    <EmbeddedResource Include="Controls\VerticalScrollbar.resx">
       <DependentUpon>VerticalScrollbar.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Scrollbar\HorizontalScrollbar.resx">
+    <EmbeddedResource Include="Controls\HorizontalScrollbar.resx">
       <DependentUpon>HorizontalScrollbar.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Timeline.resx">
+    <EmbeddedResource Include="Controls\Timeline.resx">
       <DependentUpon>Timeline.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Settings\ExpressionTemplate.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
+    <None Include="Resources\Phoneme_AI.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Phoneme_CDGKNRSThYZ.jpg" />
+    <None Include="Resources\Phoneme_CDGKNRSThYZ.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Phoneme_E.jpg" />
+    <None Include="Resources\Phoneme_O.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Phoneme_FV.jpg" />
+    <None Include="Resources\Phoneme_E.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Phoneme_L.jpg" />
+    <None Include="Resources\Phoneme_None.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Phoneme_MBP.jpg" />
+    <None Include="Resources\Phoneme_FV.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Phoneme_None.jpg" />
+    <None Include="Resources\Phoneme_L.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Phoneme_O.jpg" />
+    <None Include="Resources\Phoneme_MBP.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Phoneme_U.jpg" />
+    <None Include="Resources\Phoneme_U.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Phoneme_WQ.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Phoneme_AI.jpg" />
+    <None Include="Resources\Phoneme_WQ.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

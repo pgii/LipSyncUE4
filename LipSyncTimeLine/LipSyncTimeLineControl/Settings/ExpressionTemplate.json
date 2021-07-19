@@ -1,0 +1,66 @@
+{
+  "MouthSmile": {
+    "Name": "MouthSmile",
+    "Start": 0.0,
+    "End": 50.0,
+    "Value": 0.5,
+    "TimelineTrackType": 2,
+    "IsLocked": false
+  },
+  "SmileFullFace": {
+    "Name": "SmileFullFace",
+    "Start": 0.0,
+    "End": 50.0,
+    "Value": 1.0,
+    "TimelineTrackType": 2,
+    "IsLocked": false
+  },
+  "BrowUpDown": {
+    "Name": "BrowUpDown",
+    "Start": 0.0,
+    "End": 50.0,
+    "Value": 1.0,
+    "TimelineTrackType": 2,
+    "IsLocked": false
+  },
+  "Flirting": {
+    "Name": "Flirting",
+    "Start": 0.0,
+    "End": 50.0,
+    "Value": 1.0,
+    "TimelineTrackType": 2,
+    "IsLocked": false
+  },
+  "Frown": {
+    "Name": "Frown",
+    "Start": 0.0,
+    "End": 50.0,
+    "Value": 1.0,
+    "TimelineTrackType": 2,
+    "IsLocked": false
+  },
+  "EyesClosed": {
+    "Name": "EyesClosed",
+    "Start": 0.0,
+    "End": 50.0,
+    "Value": 1.0,
+    "TimelineTrackType": 2,
+    "IsLocked": false
+  },
+  "EyesUpDown": {
+    "Name": "EyesUpDown",
+    "Start": 0.0,
+    "End": 50.0,
+    "Value": 1.0,
+    "TimelineTrackType": 2,
+    "IsLocked": false
+  },
+  "EyesSideSide": {
+    "Name": "EyesSideSide",
+    "Start": 0.0,
+    "End": 50.0,
+    "Value": 1.0,
+    "TimelineTrackType": 2,
+    "IsLocked": false
+  }
+}

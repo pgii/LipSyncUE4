@@ -1,5 +1,15 @@
 # Concept project lip sync for Genesis 8 in Unreal Engine using morph targets
 
+Upd:
+1. The expressions template has been moved to a separate json file (Settings/ExpressionTemplate.json)
+2. Added the ability to create a track without an audio file
+3. Redesigned interface
+4. Implemented debug mode, for viewing in Unreal Engine in real time
+5. Added the ability to change the length of the track (only works when there is no audio file)
+6. Minor changes in the code. 
+
+https://youtu.be/AFBuQ8ah9ng
+
 Upd: Added Phoneme Duration.
 ```
 {"AI", 5.0f}, {"E", 4.5f}, {"U", 4.0f}, {"O", 4.0f}, {"TH", 2.0f}, {"FV", 2.5f}, {"L", 3.0f}, {"MBP", 1.5f}, {"WQ", 4.0f}
